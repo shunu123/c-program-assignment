@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+struct Student {
+    char name[50];
+    int rollNumber;
+    struct tm birthday;
+    struct tm admissionDate;
+};
+
+int calculateAge(struct tm birthday, struct tm admissionDate) {
+    int age = admissionDate.tm_year - birthday.tm_year;
+
+    if (birthday.tm_mon > admissionDate.tm_mon || (birthday.tm_mon == admissionDate.tm_mon && birthday.tm_mday > admissionDate.tm_mday)) {
+        age--;
+    }
+
+    return age;
+}
+
+int main() {
+    struct Student student;
+
+    printf("Enter name of student: ");
+    scanf("%s", student.name);
+
+    printf("Enter roll number of student: ");
+    scanf("%d", &student.rollNumber);
+
+    printf("Enter birthday (DD/MM/YYYY) of student: ");
+    scanf("%d/%d/%d", &student.birthday.tm_mday, &student.birthday.tm_mon, &student.birthday.tm_year);
+
+    printf("Enter admission date (DD/MM/YYYY) of student: ");
+    scanf("%d/%d/%d", &student.admissionDate.tm_mday, &student.admissionDate.tm_mon, &student.admissionDate.tm_year);
+
+    // Convert the birthday and admission date to time_t format
+    time_t birthdayTime = mktime(&student.birthday);
+    time_t admissionTime = mktime(&student.admissionDate);
+
+    // Convert the time_t values back to struct tm format to handle daylight saving time
+    struct tm* birthday = localtime(&birthdayTime);
+    struct tm* admission = localtime(&admissionTime);
+
+    int age = calculateAge(*birthday, *admission);
+
+    printf("\nName: %s\n", student.name);
+    printf("Roll Number: %d\n", student.rollNumber);
+    printf("Age at the time of admission: %d\n", age);
+
+    return 0;
+}
