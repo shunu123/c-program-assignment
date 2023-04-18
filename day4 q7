@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_STUDENTS 100
+
+struct Student {
+    int roll_no;
+    char stud_name[50];
+    int mark1;
+    int mark2;
+    int mark3;
+    int total_marks;
+    float avg_marks;
+};
+
+struct Student students[MAX_STUDENTS];
+int numStudents = 0;
+
+void addStudent() {
+    if (numStudents >= MAX_STUDENTS) {
+        printf("Error: Maximum number of students reached.\n");
+        return;
+    }
+
+    struct Student student;
+
+    printf("Enter student details:\n");
+
+    printf("Roll no: ");
+    scanf("%d", &student.roll_no);
+
+    printf("Name: ");
+    scanf("%s", student.stud_name);
+
+    printf("Mark 1: ");
+    scanf("%d", &student.mark1);
+
+    printf("Mark 2: ");
+    scanf("%d", &student.mark2);
+
+    printf("Mark 3: ");
+    scanf("%d", &student.mark3);
+
+    student.total_marks = student.mark1 + student.mark2 + student.mark3;
+    student.avg_marks = (float) student.total_marks / 3.0;
+
+    students[numStudents] = student;
+
+    printf("Student added successfully.\n\n");
+
+    numStudents++;
+}
+
+void displayStudent(struct Student student) {
+    printf("Roll no: %d\n", student.roll_no);
+    printf("Name: %s\n", student.stud_name);
+    printf("Mark 1: %d\n", student.mark1);
+    printf("Mark 2: %d\n", student.mark2);
+    printf("Mark 3: %d\n", student.mark3);
+    printf("Total marks: %d\n", student.total_marks);
+    printf("Average marks: %.2f\n\n", student.avg_marks);
+}
+
+void displayAllStudents() {
+    if (numStudents == 0) {
+        printf("Error: No students found.\n");
+        return;
+    }
+
+    printf("Student records in descending order of marks:\n\n");
+
+    for (int i = 0; i < numStudents; i++) {
+        for (int j = i + 1; j < numStudents; j++) {
+            if (students[j].total_marks > students[i].total_marks) {
+                struct Student temp = students[i];
+                students[i] = students[j];
+                students[j] = temp;
+            }
+        }
+
+        printf("Student %d:\n", i + 1);
+        displayStudent(students[i]);
+    }
+}
+
+int main() {
+    int choice;
+
+    do {
+        printf("Student Menu:\n");
+        printf("1. Add student details\n");
+        printf("2. Display all students\n");
+        printf("3. Exit\n\n");
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addStudent();
+                break;
+            case 2:
+                displayAllStudents();
+                break;
+            case 3:
+                printf("Exiting program.\n");
+                return 0;
+            default:
+                printf("Error: Invalid choice.\n\n");
+                break;
+        }
+    } while (1);
+
+    return 0;
+}
+Footer
