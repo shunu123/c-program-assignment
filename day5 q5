@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <ctype.h>
+
+int main() {
+   FILE *fpIn, *fpOut;
+   int letterCount[26] = {0};
+   char ch;
+
+   // Open input and output files
+   fpIn = fopen("data.txt", "r");
+   fpOut = fopen("statistics.txt", "w");
+
+   // Read input file and count letters
+   while ((ch = fgetc(fpIn)) != EOF) {
+      if (isalpha(ch)) {
+         ch = tolower(ch);
+         letterCount[ch - 'a']++;
+      }
+   }
+
+   // Write letter counts to output file
+   for (int i = 0; i < 26; i++) {
+      fprintf(fpOut, "%c: %d\n", 'a' + i, letterCount[i]);
+   }
+
+   // Close files
+   fclose(fpIn);
+   fclose(fpOut);
+
+   printf("Letter statistics written to statistics.txt\n");
+
+   return 0;
+}
